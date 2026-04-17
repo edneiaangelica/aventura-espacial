@@ -1,0 +1,25 @@
+{
+  "name": "Aventura Espacial",
+  "short_name": "Aventura",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#050a16",
+  "theme_color": "#081126",
+  "orientation": "landscape",
+  "description": "Jogo pedagógico de Matemática para o 3º ano do Ensino Fundamental.",
+  "icons": [
+    {
+      "src": "./assets/images/tela-inicial.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/images/tela-inicial.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

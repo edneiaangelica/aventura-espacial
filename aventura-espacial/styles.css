@@ -218,7 +218,6 @@ button.option:hover {
 
 @media (max-width: 900px) {
   .screen {
-    grid-template-columns: 1fr 1fr;
     gap: 0.55rem;
   }
   .card {

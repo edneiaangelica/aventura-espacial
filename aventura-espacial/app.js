@@ -39,12 +39,15 @@ const sounds = {
   vitoria: "./assets/sounds/vitoria.mp3"
 };
 
+const FINAL_CODE = "8569";
+const FEEDBACK_DURATION_MS = 1300;
+
 const level1Questions = [
   { panel: 9, options: { A: "4 + 5", B: "6 + 2", C: "5 + 3", D: "8 + 0" }, answer: "A" },
   { panel: 10, options: { A: "4 + 5", B: "6 + 2", C: "5 + 3", D: "8 + 2" }, answer: "D" },
   { panel: 8, options: { A: "4 + 5", B: "6 + 2", C: "5 + 3", D: "8 + 1" }, answer: "C" },
-  { panel: 14, options: { A: "6 + 5", B: "6 + 3", C: "7 + 7", E: "8 + 0" }, answer: "C" },
-  { panel: 15, options: { A: "9 + 5", B: "7 + 8", C: "8 + 8", E: "8 + 4" }, answer: "B" }
+  { panel: 14, options: { A: "6 + 5", B: "6 + 3", C: "7 + 7", D: "8 + 0" }, answer: "C" },
+  { panel: 15, options: { A: "9 + 5", B: "7 + 8", C: "8 + 8", D: "8 + 4" }, answer: "B" }
 ];
 
 const level2Questions = [
@@ -148,7 +151,7 @@ function showFeedback({ title, text, image, sound }, cb) {
   setTimeout(() => {
     feedbackModal.classList.add("hidden");
     if (cb) cb();
-  }, 1300);
+  }, FEEDBACK_DURATION_MS);
 }
 
 function stopTimer() {
@@ -544,12 +547,12 @@ function renderCodeEntry() {
       <h2>Digite o código de 4 dígitos</h2>
       <p>Use as pistas para descobrir a sequência correta.</p>
       <div class="code-inputs">
-        <input inputmode="numeric" maxlength="1" class="digit" />
-        <input inputmode="numeric" maxlength="1" class="digit" />
-        <input inputmode="numeric" maxlength="1" class="digit" />
-        <input inputmode="numeric" maxlength="1" class="digit" />
+        <input inputmode="numeric" maxlength="1" class="digit" aria-label="Dígito 1 do código" />
+        <input inputmode="numeric" maxlength="1" class="digit" aria-label="Dígito 2 do código" />
+        <input inputmode="numeric" maxlength="1" class="digit" aria-label="Dígito 3 do código" />
+        <input inputmode="numeric" maxlength="1" class="digit" aria-label="Dígito 4 do código" />
       </div>
-      <button class="primary" id="check-code">CONFIRMAR CÓDIGO</button>
+      <button class="primary" id="check-code" aria-label="Confirmar código de quatro dígitos">CONFIRMAR CÓDIGO</button>
     `
   );
 
@@ -563,7 +566,7 @@ function renderCodeEntry() {
 
   document.getElementById("check-code").addEventListener("click", () => {
     const code = digitInputs.map((el) => el.value).join("");
-    const success = code === "8569";
+    const success = code === FINAL_CODE;
 
     createResultScreen(
       success ? images.finalV : images.finalD,
@@ -601,7 +604,10 @@ function configureGlobalActions() {
     }
   });
 
-  const showInstallOnFirstVisit = !localStorage.getItem("aventura-install-visit");
+  const isStandalone =
+    // navigator.standalone cobre Safari iOS quando o app é aberto pela tela inicial.
+    window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+  const showInstallOnFirstVisit = !isStandalone && !localStorage.getItem("aventura-install-visit");
   if (showInstallOnFirstVisit) {
     installButton.classList.remove("hidden");
     localStorage.setItem("aventura-install-visit", "1");
@@ -618,8 +624,15 @@ function configureGlobalActions() {
       state.deferredPrompt.prompt();
       await state.deferredPrompt.userChoice;
       state.deferredPrompt = null;
+      installButton.classList.add("hidden");
+      return;
     }
-    installButton.classList.add("hidden");
+
+    showFeedback({
+      title: "Instalação",
+      text: "Use o menu do navegador e escolha \"Adicionar à tela inicial\" para instalar no celular.",
+      sound: null
+    });
   });
 
   if ("serviceWorker" in navigator) {

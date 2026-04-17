@@ -3,7 +3,7 @@ Jogo pedagógico de matemática para o 3º ano do Ensino fundamental. Os estudan
 
 ## Como executar
 
-Abra `aventura-espacial/index.html` em um navegador moderno (preferencialmente no celular em modo paisagem).
+Abra `index.html` em um navegador moderno (preferencialmente no celular em modo paisagem), ou acesse pelo GitHub Pages: **https://edneiaangelica.github.io/aventura-espacial/**
 
 ## Recursos implementados
 
